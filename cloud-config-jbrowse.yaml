@@ -1,0 +1,79 @@
+#cloud-config
+ 
+# Instance
+
+bootcmd:
+- sysctl "vm.swappiness=0"
+- cloud-init-per once unmount-mnt umount /mnt
+- cloud-init-per once mkswap-volume mkswap /dev/xvdb
+- cloud-init-per once enable-swapon swapon /dev/xvdb
+
+mounts:
+- [ /dev/xvdb ]
+
+package_update: true
+
+package_upgrade: true
+
+packages:
+- apache2
+- awscli
+- git
+- kwalify
+- libcgi-application-perl
+- libcgi-application-plugin-session-perl
+- libcgi-application-plugin-tt-perl
+- libclone-perl
+- libconfig-yaml-perl
+- libdata-formvalidator-perl
+- libdbd-mysql-perl
+- libdbd-sqlite3-perl
+- libdbi-perl
+- libfile-slurp-perl
+- libfile-type-perl
+- libfreezethaw-perl
+- libgraph-perl
+- libgraphviz-perl
+- libjson-xs-perl
+- libossp-uuid-perl
+- liburi-perl
+- libwww-mechanize-perl
+- libxml-xpath-perl
+- libdbd-mysql-perl
+- libxml-libxml-perl
+- make
+- naturaldocs
+- rhino
+- rsync
+- yui-compressor
+
+power_state:
+  mode: reboot
+
+runcmd:
+- sudo mkdir /www
+- sudo mkdir /www/error /www/html /www/icons /www/logs
+- sudo addgroup --gid 674 bradmin
+- sudo adduser --uid 3481 --gid 674 --gecos "JBrowse User" --home /home/bradmin --shell /bin/bash --disabled-password bradmin
+- sudo chgrp bradmin /usr/local/src
+- sudo chmod 2775 /usr/local/src
+#- "cd /usr/local/src; sudo -u golr git clone git://github.com/kltm/amigo.git"
+#- curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone | sed 's/.*-//' > /tmp/zone
+#- aws --region us-west-2 s3 cp s3://amigo-conf/amigo-`cat /tmp/zone`.yaml /tmp/amigo.yaml
+#- cat /tmp/amigo.yaml
+#- sudo chown golr:golr /tmp/amigo.yaml
+#- sudo cp -p /tmp/amigo.yaml /usr/local/src/amigo/conf/amigo.yaml
+#- aws --region us-west-2 s3 cp s3://amigo-conf/amigo2.conf /tmp/amigo2.conf
+#- sudo chown root:root /tmp/amigo2.conf
+#- sudo mv /tmp/amigo2.conf /etc/apache2/sites-available/
+#- sudo ln -s /usr/local/src/amigo/static /www/html/static
+#- sudo ln -s /usr/local/src/amigo/perl/bin /www/cgi-bin
+#- sudo a2ensite amigo2
+#- sudo service apache2 stop
+#- sudo mkdir -p /data/solr
+#- sudo chown bradmin:bradmin /data/bradmin
+#- sudo rm -f /usr/local/src/amigo/golr_timestamp.log
+#- sudo -u golr curl -s https://golr-aws-lb.geneontology.org/web/golr_timestamp.log > /usr/local/src/amigo/golr_timestamp.log
+#- "cd /usr/local/src/amigo; sudo -u golr make install"
+
+timezone: US/Pacific

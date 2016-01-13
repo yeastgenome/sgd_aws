@@ -21,9 +21,11 @@ def main():
     print args
 
     conn = boto.ec2.connect_to_region("us-west-2", profile_name=str.lower(args.aws_profile))
+
+    #domain = 'jbrowse' if  == 'jbrowse' else 'jbrowse-dev'
     
     if str.lower(args.service_name) == 'jbrowse':
-        cloud_config_file = '/Users/kkarra/Dev/sgd_aws/cloud-config-jbrowse.yaml'
+        cloud_config_file = '~/Dev/sgd_aws/cloud-config-jbrowse.yaml'
         root_vol_size = 30
         data_vol_size = 0
         key_name = 'jbrowse'
@@ -31,7 +33,7 @@ def main():
         instance_type = 'm3.medium'
         instance_profile_arn = None
     elif str.lower(args.service_name) == 'jbrowse-dev':
-        cloud_config_file = '/Users/kkarra/Dev/sgd_aws/cloud-config-jbrowse-dev.yaml'
+        cloud_config_file = '~/Dev/sgd_aws/cloud-config-jbrowse-dev.yaml'
         root_vol_size = 16
         data_vol_size = 200
         key_name = 'jbrowse-dev'

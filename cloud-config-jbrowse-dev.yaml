@@ -21,6 +21,7 @@ package_upgrade: true
 
 packages:
 - apache2
+- awscli
 - emacs
 - git
 - unzip
@@ -40,14 +41,18 @@ power_state:
 runcmd:
 - sudo addgroup --gid 674 bradmin
 - sudo adduser --uid 3481 --gid 674 --gecos "JBrowse User" --home /home/kkarra --shell /bin/bash --disabled-password kkarra
-- sudo chgrp -R bradmin /var/www/html
-- sudo chown -R kkarra /var/www/html
+- sudo chown kkarra:bradmin /home/kkarra
+- sudo chown -R kkarra:bradmin /home/kkarra/.ssh
+- sudo chmod 0700 /home/kkarra/.ssh
+
 - sudo chmod g+w /var/www/html
 - cd /var/www/html/
-- curl -O http://jbrowse.org/releases/JBrowse-1.11.6.zip
-- unzip JBrowse-1.11.6.zip
-- ln -s JBrowse-1.11.6/ jbrowse
-- cd JBrowse-1.11.6/
+- curl -O http://jbrowse.org/releases/JBrowse-1.12.0.zip
+- unzip JBrowse-1.12.0.zip
+- ln -s JBrowse-1.12.0/ jbrowse
+- cd JBrowse-1.12.0/
+- sudo chgrp -R bradmin /var/www/html
+- sudo chown -R kkarra /var/www/html
 - ./setup.sh
 - wget http://downloads.yeastgenome.org/sequence/S288C_reference/genome_releases/S288C_reference_genome_Current_Release.tgz
 - gunzip S288C_reference_genome_Current_Release.tgz
@@ -56,7 +61,7 @@ runcmd:
 write_files:
 
 - path: /home/kkarra/.ssh/authorized_keys
-  owner: kkarra:root
+  owner: kkarra:bradmin
   permissions: '0600'
   content: |
     ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCWBJZnICfdc1u1/0lX68ojjZymA1fLfHaasRxsZX5K+IrU7617MlFDwyVTJ8Rku1czpg6uSPfB2m84M8ilxPBd3bQs/GLZ1Fn/BQ2ZwuZSbR2eB7UD0ag4p7KHqB5bXhP5DyMVLKFq31Q3m5Oc3iddeGImXyeNHmvMRBiL4Jt6A3KY4k1pGtCVARz9ndOFI4dMMX2WbLfY5PhnE1zAIMFaWeBMA1aQfshX23EYlXHLZHSJT/A9GPUsTokZT5lJIkxEezf4zXpcQSWXo1/3UIRh//NkzItJ+jSaeARpf5INcRG1N6m6EOCV7AjPk/k3m1MmoXXZ2Ow76JprF+jILijz
